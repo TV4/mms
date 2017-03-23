@@ -7,6 +7,13 @@ import (
 	"time"
 )
 
+const (
+	defaultScheme    = "https"
+	defaultHost      = "titleservice.mms.se"
+	defaultUserAgent = "mms/titleservice/client.go (https://github.com/TV4/mms)"
+)
+
+// Client for the MMS TitleService API
 type Client interface {
 	RegisterSeries(context.Context, Series)
 	RegisterEpisode(context.Context, Episode)
@@ -21,17 +28,17 @@ type client struct {
 	password   string
 }
 
-// NewClient creates an MMS TitleService Client
+// NewClient creates a MMS TitleService Client
 func NewClient(username, password string, options ...func(*client)) Client {
 	c := &client{
 		httpClient: &http.Client{
 			Timeout: 30 * time.Second,
 		},
 		baseURL: &url.URL{
-			Scheme: "https",
-			Host:   "titleservice.mms.se",
+			Scheme: defaultScheme,
+			Host:   defaultHost,
 		},
-		userAgent: "mms/titleservice/client.go (https://github.com/TV4/mms)",
+		userAgent: defaultUserAgent,
 		username:  username,
 		password:  password,
 	}
