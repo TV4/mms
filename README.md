@@ -8,9 +8,9 @@ Go clients for [MMS](http://mms.se/) services.
 
 ## Clients
 
-Name                           | Documentation
------------------------------: | :---------------------------------------------------------------
-*[titleservice](titleservice)* | [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/TV4/mms/titleservice)
+Name                             | Documentation
+-------------------------------: | :---------------------------------------------------------------
+**[titleservice](titleservice)** | [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/TV4/mms/titleservice)
 
 ## License (MIT)
 
