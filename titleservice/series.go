@@ -2,6 +2,7 @@ package titleservice
 
 import "context"
 
+// Series is a title linked to a series/season
 type Series struct {
 	SeriesCode   string
 	Title        string
