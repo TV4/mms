@@ -2,8 +2,15 @@
 
 [![Build Status](https://travis-ci.org/TV4/mms.svg?branch=master)](https://travis-ci.org/TV4/mms)
 [![Go Report Card](https://goreportcard.com/badge/github.com/TV4/mms)](https://goreportcard.com/report/github.com/TV4/mms)
-[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/TV4/mms)
 [![License MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/TV4/mms#license-mit)
+
+Go clients for [MMS](http://mms.se/) services.
+
+## Clients
+
+Name                           | Documentation
+-----------------------------: | :---------------------------------------------------------------
+*[titleservice](titleservice)* | [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/TV4/mms/titleservice)
 
 ## License (MIT)
 
