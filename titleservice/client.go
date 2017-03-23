@@ -72,11 +72,3 @@ func UserAgent(ua string) func(*client) {
 		c.userAgent = ua
 	}
 }
-
-// Authentication changes the username and password used in requests sent by the *client
-func Authentication(username, password string) func(*client) {
-	return func(c *client) {
-		c.username = username
-		c.password = password
-	}
-}
