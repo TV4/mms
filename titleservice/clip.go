@@ -1,6 +1,9 @@
 package titleservice
 
-import "context"
+import (
+	"context"
+	"net/url"
+)
 
 // Clip is a “stand-alone” short clip not linked to a series/season or other title
 type Clip struct {
@@ -13,4 +16,6 @@ type Clip struct {
 	PlayURL        string
 }
 
-func (c *client) RegisterClip(ctx context.Context, clip Clip) {}
+func (c *client) RegisterClip(ctx context.Context, clip Clip) (*Response, error) {
+	return c.post(ctx, "RegisterClip", url.Values{})
+}

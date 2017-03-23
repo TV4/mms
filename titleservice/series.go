@@ -1,6 +1,9 @@
 package titleservice
 
-import "context"
+import (
+	"context"
+	"net/url"
+)
 
 // Series is a title linked to a series/season
 type Series struct {
@@ -11,4 +14,6 @@ type Series struct {
 	GenreText    string
 }
 
-func (c *client) RegisterSeries(ctx context.Context, series Series) {}
+func (c *client) RegisterSeries(ctx context.Context, series Series) (*Response, error) {
+	return c.post(ctx, "RegisterSeries", url.Values{})
+}

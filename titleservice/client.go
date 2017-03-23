@@ -2,8 +2,12 @@ package titleservice
 
 import (
 	"context"
+	"encoding/json"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 )
 
@@ -15,9 +19,9 @@ const (
 
 // Client for the MMS TitleService API
 type Client interface {
-	RegisterSeries(context.Context, Series)
-	RegisterEpisode(context.Context, Episode)
-	RegisterClip(context.Context, Clip)
+	RegisterSeries(context.Context, Series) (*Response, error)
+	RegisterEpisode(context.Context, Episode) (*Response, error)
+	RegisterClip(context.Context, Clip) (*Response, error)
 }
 
 type client struct {
@@ -77,4 +81,61 @@ func UserAgent(ua string) func(*client) {
 // Simulate configures the client to make simulated requests (nothing will be saved to MMS' databases)
 func Simulate(c *client) {
 	c.simulate = true
+}
+
+func (c *client) post(ctx context.Context, path string, query url.Values) (*Response, error) {
+	req, err := c.request(ctx, path, query)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.do(req)
+}
+
+func (c *client) request(ctx context.Context, path string, v url.Values) (*http.Request, error) {
+	v.Set("user", c.username)
+	v.Set("pass", c.password)
+
+	if c.simulate {
+		v.Set("simulate", "")
+	}
+
+	rel, err := url.Parse(path)
+	if err != nil {
+		return nil, err
+	}
+
+	rawurl := c.baseURL.ResolveReference(rel).String()
+
+	req, err := http.NewRequest("POST", rawurl, strings.NewReader(v.Encode()))
+	if err != nil {
+		return nil, err
+	}
+
+	req = req.WithContext(ctx)
+
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("User-Agent", c.userAgent)
+
+	return req, nil
+}
+
+func (c *client) do(req *http.Request) (*Response, error) {
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_, _ = io.CopyN(ioutil.Discard, resp.Body, 64)
+		_ = resp.Body.Close()
+	}()
+
+	var r Response
+
+	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
 }

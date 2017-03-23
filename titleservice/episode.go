@@ -1,6 +1,9 @@
 package titleservice
 
-import "context"
+import (
+	"context"
+	"net/url"
+)
 
 // Episode is a title linked to a series/season
 type Episode struct {
@@ -26,4 +29,6 @@ type Episode struct {
 	SuggestedGenre3 string
 }
 
-func (c *client) RegisterEpisode(ctx context.Context, episode Episode) {}
+func (c *client) RegisterEpisode(ctx context.Context, episode Episode) (*Response, error) {
+	return c.post(ctx, "RegisterEpisode", url.Values{})
+}
