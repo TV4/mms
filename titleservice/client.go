@@ -10,7 +10,7 @@ import (
 const (
 	defaultScheme    = "https"
 	defaultHost      = "titleservice.mms.se"
-	defaultUserAgent = "mms/titleservice/client.go (https://github.com/TV4/mms)"
+	defaultUserAgent = "titleservice/client.go (godoc.org/github.com/TV4/mms/titleservice)"
 )
 
 // Client for the MMS TitleService API
