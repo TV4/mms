@@ -26,6 +26,7 @@ type client struct {
 	userAgent  string
 	username   string
 	password   string
+	simulate   bool
 }
 
 // NewClient creates a MMS TitleService Client
@@ -71,4 +72,9 @@ func UserAgent(ua string) func(*client) {
 	return func(c *client) {
 		c.userAgent = ua
 	}
+}
+
+// Simulate configures the client to make simulated requests (nothing will be saved to MMS' databases)
+func Simulate(c *client) {
+	c.simulate = true
 }

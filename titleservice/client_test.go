@@ -35,6 +35,10 @@ func TestNewClient(t *testing.T) {
 		if got, want := c.password, "bar"; got != want {
 			t.Fatalf("c.password = %q, want %q", got, want)
 		}
+
+		if got, want := c.simulate, false; got != want {
+			t.Fatalf("c.simulate = %v, want %v", got, want)
+		}
 	})
 
 	t.Run("HTTPClient", func(t *testing.T) {
@@ -64,6 +68,14 @@ func TestNewClient(t *testing.T) {
 
 		if got, want := c.userAgent, ua; got != want {
 			t.Fatalf("c.userAgent = %q, want %q", got, want)
+		}
+	})
+
+	t.Run("Simulate", func(t *testing.T) {
+		c := NewClient("", "", Simulate).(*client)
+
+		if got, want := c.simulate, true; got != want {
+			t.Fatalf("c.simulate = %v, want %v", got, want)
 		}
 	})
 }
