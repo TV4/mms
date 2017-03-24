@@ -1,5 +1,15 @@
 package titleservice
 
+import "errors"
+
+var (
+	// ErrUnexpectedContentType is returned if response isn't JSON
+	ErrUnexpectedContentType = errors.New("unexpected Content-Type")
+
+	// ErrMissingParameter is returned if missing a parameter required by the MMS TitleService API
+	ErrMissingParameter = errors.New("missing parameter")
+)
+
 // ErrorWithMessage annotates err with a new message.
 // If err is nil, ErrorWithMessage returns nil.
 func ErrorWithMessage(err error, msg string) error {
