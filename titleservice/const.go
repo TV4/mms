@@ -35,6 +35,17 @@ const (
 	WebLiveBroadcast CategoryID = 10
 )
 
+func validCategoryID(id CategoryID) bool {
+	switch id {
+	case TvProgram, TvSegment, TvExtra,
+		Webisode, WebSegment, WebExtra, WebClip,
+		Simulcast, ChannelSimulcast, WebLiveBroadcast:
+		return true
+	}
+
+	return false
+}
+
 // LiveChannelID type used to identify Live TV Broadcast Channels
 type LiveChannelID int
 
@@ -66,3 +77,15 @@ const (
 	Kanal11                LiveChannelID = 2025
 	Eurosport2Sweden       LiveChannelID = 2047
 )
+
+func validLiveChannelID(id LiveChannelID) bool {
+	switch id {
+	case
+		SVT1, SVT2, Discovery, Kanal5, TV3, TV4, Kanal9, SVTB, Sjuan, TV4Film, TV6,
+		TV4Sport, TV4Fakta, TV4Guld, TV4Komedi, TV8, SVT24, TV12, Kunskapskanalen,
+		TV10, TLC, InvestigationDiscovery, Eurosport, Kanal11, Eurosport2Sweden:
+		return true
+	}
+
+	return false
+}

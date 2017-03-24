@@ -135,7 +135,7 @@ func (e *Episode) validate() error {
 		return ErrorWithMessage(ErrInvalidParameter, "PublishedAt")
 	}
 
-	if e.CategoryID < TvProgram || e.CategoryID > WebLiveBroadcast {
+	if !validCategoryID(e.CategoryID) {
 		return ErrorWithMessage(ErrInvalidParameter, "CategoryID")
 	}
 
@@ -153,7 +153,7 @@ func (e *Episode) validate() error {
 			return ErrorWithMessage(ErrInvalidParameter, "LiveTime")
 		}
 
-		if e.LiveChannelID < SVT1 || e.LiveChannelID > Eurosport2Sweden {
+		if !validLiveChannelID(e.LiveChannelID) {
 			return ErrorWithMessage(ErrInvalidParameter, "LiveChannelID")
 		}
 	}
