@@ -85,14 +85,24 @@ func TestNewClient(t *testing.T) {
 }
 
 func TestClientRequest(t *testing.T) {
-	c := testClient()
-
 	for _, tt := range []struct {
-		path string
-		v    url.Values
+		simulate bool
+		path     string
+		username string
+		password string
+		v        url.Values
+		encoded  string
 	}{
-		{"/FooBar", url.Values{}},
+		{false, "/FooBar", "fooUser", "barPass", url.Values{}, "pass=barPass&user=fooUser"},
+		{false, "/BarBaz", "barUser", "bazPass", url.Values{}, "pass=bazPass&user=barUser"},
+		{true, "/BazQux", "bazUser", "quxPass", url.Values{"quux": {"corge"}}, "pass=quxPass&quux=corge&simulate=&user=bazUser"},
 	} {
+		c := testClient(func(c *client) {
+			c.username = tt.username
+			c.password = tt.password
+			c.simulate = tt.simulate
+		})
+
 		req, err := c.request(context.Background(), tt.path, tt.v)
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
@@ -106,7 +116,7 @@ func TestClientRequest(t *testing.T) {
 			t.Fatalf(`req.Header.Get("Accept") = %q, want %q`, got, want)
 		}
 
-		if got, want := req.Header.Get("User-Agent"), "titleservice/client.go (godoc.org/github.com/TV4/mms/titleservice)"; got != want {
+		if got, want := req.Header.Get("User-Agent"), defaultUserAgent; got != want {
 			t.Fatalf(`req.Header.Get("Content-Type") = %q, want %q`, got, want)
 		}
 
@@ -114,12 +124,10 @@ func TestClientRequest(t *testing.T) {
 			t.Fatalf(`req.Header.Get("Content-Type") = %q, want %q`, got, want)
 		}
 
-		if got, want := req.FormValue("user"), testUser; got != want {
-			t.Fatalf(`req.FormValue("user") = %q, want %q`, got, want)
-		}
+		req.ParseForm()
 
-		if got, want := req.FormValue("pass"), testPass; got != want {
-			t.Fatalf(`req.FormValue("user") = %q, want %q`, got, want)
+		if got, want := req.Form.Encode(), tt.encoded; got != want {
+			t.Fatalf("req.Form.Encode() = %q, want %q", got, want)
 		}
 	}
 }
@@ -130,8 +138,14 @@ const (
 	testHost = "http://example.com"
 )
 
-func testClient() *client {
-	return NewClient(testUser, testPass, BaseURL(testHost)).(*client)
+func testClient(options ...func(*client)) *client {
+	c := NewClient(testUser, testPass, BaseURL(testHost)).(*client)
+
+	for _, f := range options {
+		f(c)
+	}
+
+	return c
 }
 
 func testServerAndClient(username, password string, hf http.HandlerFunc) (*httptest.Server, *client) {
@@ -159,6 +173,7 @@ func testHandlerFunc(statusCode int, errors []string) http.HandlerFunc {
 		}
 
 		w.WriteHeader(statusCode)
+
 		enc.Encode(testResponse(statusCode, errors))
 	}
 }
