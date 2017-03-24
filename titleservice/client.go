@@ -84,8 +84,8 @@ func Simulate(c *client) {
 	c.simulate = true
 }
 
-func (c *client) post(ctx context.Context, path string, query url.Values) (*Response, error) {
-	req, err := c.request(ctx, path, query)
+func (c *client) post(ctx context.Context, path string, params url.Values) (*Response, error) {
+	req, err := c.request(ctx, path, params)
 	if err != nil {
 		return nil, err
 	}
@@ -93,12 +93,12 @@ func (c *client) post(ctx context.Context, path string, query url.Values) (*Resp
 	return c.do(req)
 }
 
-func (c *client) request(ctx context.Context, path string, v url.Values) (*http.Request, error) {
-	v.Set("user", c.username)
-	v.Set("pass", c.password)
+func (c *client) request(ctx context.Context, path string, params url.Values) (*http.Request, error) {
+	params.Set("user", c.username)
+	params.Set("pass", c.password)
 
 	if c.simulate {
-		v.Set("simulate", "")
+		params.Set("simulate", "")
 	}
 
 	rel, err := url.Parse(path)
@@ -108,7 +108,7 @@ func (c *client) request(ctx context.Context, path string, v url.Values) (*http.
 
 	rawurl := c.baseURL.ResolveReference(rel).String()
 
-	req, err := http.NewRequest("POST", rawurl, strings.NewReader(v.Encode()))
+	req, err := http.NewRequest("POST", rawurl, strings.NewReader(params.Encode()))
 	if err != nil {
 		return nil, ErrorWithMessage(err, "unable to create POST request")
 	}
