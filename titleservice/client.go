@@ -103,14 +103,14 @@ func (c *client) request(ctx context.Context, path string, v url.Values) (*http.
 
 	rel, err := url.Parse(path)
 	if err != nil {
-		return nil, err
+		return nil, ErrorWithMessage(err, "unable to parse path")
 	}
 
 	rawurl := c.baseURL.ResolveReference(rel).String()
 
 	req, err := http.NewRequest("POST", rawurl, strings.NewReader(v.Encode()))
 	if err != nil {
-		return nil, err
+		return nil, ErrorWithMessage(err, "unable to create POST request")
 	}
 
 	req = req.WithContext(ctx)
@@ -125,7 +125,7 @@ func (c *client) request(ctx context.Context, path string, v url.Values) (*http.
 func (c *client) do(req *http.Request) (*Response, error) {
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, ErrorWithMessage(err, "error sending the request")
 	}
 	defer func() {
 		_, _ = io.CopyN(ioutil.Discard, resp.Body, 64)
@@ -135,7 +135,7 @@ func (c *client) do(req *http.Request) (*Response, error) {
 	var r Response
 
 	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
-		return nil, err
+		return nil, ErrorWithMessage(err, "unable to decode the response body as JSON")
 	}
 
 	return &r, nil
