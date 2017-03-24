@@ -8,6 +8,9 @@ var (
 
 	// ErrMissingParameter is returned if missing a parameter required by the MMS TitleService API
 	ErrMissingParameter = errors.New("missing parameter")
+
+	// ErrInvalidParameter is returned if a parameter is invalid for some reason
+	ErrInvalidParameter = errors.New("invalid parameter")
 )
 
 // ErrorWithMessage annotates err with a new message.

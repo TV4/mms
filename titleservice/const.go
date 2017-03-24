@@ -1,5 +1,13 @@
 package titleservice
 
+// Codes used in the MMS TitleService API
+const (
+	Adults   = "V"
+	Children = "B"
+	Swedish  = "S"
+	Foreign  = "U"
+)
+
 // Endpoint type
 type Endpoint string
 

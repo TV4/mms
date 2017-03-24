@@ -108,6 +108,18 @@ func Simulate(c *client) {
 	c.simulate = true
 }
 
+func (c *client) RegisterSeries(ctx context.Context, series Series) (*Response, error) {
+	return c.register(ctx, &series)
+}
+
+func (c *client) RegisterEpisode(ctx context.Context, episode Episode) (*Response, error) {
+	return c.register(ctx, &episode)
+}
+
+func (c *client) RegisterClip(ctx context.Context, clip Clip) (*Response, error) {
+	return c.register(ctx, &clip)
+}
+
 func (c *client) register(ctx context.Context, req Request) (*Response, error) {
 	params, err := req.Params()
 	if err != nil {
@@ -164,6 +176,16 @@ func (c *client) do(req *http.Request) (*Response, error) {
 		_, _ = io.CopyN(ioutil.Discard, resp.Body, 64)
 		_ = resp.Body.Close()
 	}()
+
+	if ct := resp.Header.Get("Content-Type"); !strings.Contains(ct, "application/json") {
+		err := ErrorWithMessage(ErrUnexpectedContentType, ct)
+
+		return &Response{
+			StatusCode:        resp.StatusCode,
+			StatusDescription: resp.Status,
+			Errors:            []string{err.Error()},
+		}, err
+	}
 
 	var r Response
 
