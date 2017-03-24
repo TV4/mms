@@ -16,7 +16,7 @@ func TestNewClient(t *testing.T) {
 
 		c := NewClient(username, password).(*client)
 
-		if got, want := c.httpClient.Timeout, 30*time.Second; got != want {
+		if got, want := c.httpClient.Timeout, defaultTimeout; got != want {
 			t.Fatalf("c.httpClient.Timeout = %v, want %v", got, want)
 		}
 

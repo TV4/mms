@@ -15,6 +15,7 @@ const (
 	defaultScheme    = "https"
 	defaultHost      = "titleservice.mms.se"
 	defaultUserAgent = "titleservice/client.go (godoc.org/github.com/TV4/mms/titleservice)"
+	defaultTimeout   = 30 * time.Second
 )
 
 // Client for the MMS TitleService API
@@ -37,7 +38,7 @@ type client struct {
 func NewClient(username, password string, options ...func(*client)) Client {
 	c := &client{
 		httpClient: &http.Client{
-			Timeout: 30 * time.Second,
+			Timeout: defaultTimeout,
 		},
 		baseURL: &url.URL{
 			Scheme: defaultScheme,
