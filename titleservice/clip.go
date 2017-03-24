@@ -16,6 +16,16 @@ type Clip struct {
 	PlayURL        string
 }
 
+// Endpoint returns the endpoint to use for this request type
+func (c Clip) Endpoint() Endpoint {
+	return RegisterClipEndpoint
+}
+
+// Params validates and returns the parameters sent to the MMS TitleService API for this request type
+func (c Clip) Params() (url.Values, error) {
+	return url.Values{}, nil
+}
+
 func (c *client) RegisterClip(ctx context.Context, clip Clip) (*Response, error) {
-	return c.post(ctx, "RegisterClip", url.Values{})
+	return c.register(ctx, clip)
 }

@@ -14,6 +14,16 @@ type Series struct {
 	GenreText    string
 }
 
+// Endpoint returns the endpoint to use for this request type
+func (s Series) Endpoint() Endpoint {
+	return RegisterSeriesEndpoint
+}
+
+// Params validates and returns the parameters sent to the MMS TitleService API for this request type
+func (s Series) Params() (url.Values, error) {
+	return url.Values{}, nil
+}
+
 func (c *client) RegisterSeries(ctx context.Context, series Series) (*Response, error) {
-	return c.post(ctx, "RegisterSeries", url.Values{})
+	return c.register(ctx, series)
 }

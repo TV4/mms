@@ -25,6 +25,12 @@ type Client interface {
 	RegisterClip(context.Context, Clip) (*Response, error)
 }
 
+// Request interface used in requests to the MMS TitleService API
+type Request interface {
+	Endpoint() Endpoint
+	Params() (url.Values, error)
+}
+
 // Response is used for responses from the MMS TitleService API
 type Response struct {
 	StatusCode        int      `json:"StatusCode"`
@@ -91,8 +97,17 @@ func Simulate(c *client) {
 	c.simulate = true
 }
 
-func (c *client) post(ctx context.Context, path string, params url.Values) (*Response, error) {
-	req, err := c.request(ctx, path, params)
+func (c *client) register(ctx context.Context, req Request) (*Response, error) {
+	params, err := req.Params()
+	if err != nil {
+		return nil, ErrorWithMessage(err, string(req.Endpoint()))
+	}
+
+	return c.post(ctx, req.Endpoint(), params)
+}
+
+func (c *client) post(ctx context.Context, endpoint Endpoint, params url.Values) (*Response, error) {
+	req, err := c.request(ctx, string(endpoint), params)
 	if err != nil {
 		return nil, err
 	}

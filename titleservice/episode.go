@@ -29,6 +29,16 @@ type Episode struct {
 	SuggestedGenre3 string
 }
 
+// Endpoint returns the endpoint to use for this request type
+func (e Episode) Endpoint() Endpoint {
+	return RegisterEpisodeEndpoint
+}
+
+// Params validates and returns the parameters sent to the MMS TitleService API for this request type
+func (e Episode) Params() (url.Values, error) {
+	return url.Values{}, nil
+}
+
 func (c *client) RegisterEpisode(ctx context.Context, episode Episode) (*Response, error) {
-	return c.post(ctx, "RegisterEpisode", url.Values{})
+	return c.register(ctx, episode)
 }
