@@ -34,16 +34,11 @@ func main() {
 		enc    = json.NewEncoder(os.Stdout)
 		ctx    = context.Background()
 		c      = titleservice.NewClient(username, password, titleservice.Simulate)
-
-		clip = titleservice.Clip{
-			TitleCode:   "123",
-			Title:       "Test-title",
-			Length:      1,
-			PublishedAt: "20170324",
-		}
 	)
 
-	resp, err := c.RegisterClip(ctx, clip)
+	resp, err := c.RegisterClip(ctx, titleservice.MakeClip(
+		"123", "Test-title", 456, titleservice.Date(2017, 3, 24),
+	))
 	if err != nil {
 		logger.Fatal(resp, "\n", err)
 	}
