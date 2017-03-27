@@ -70,19 +70,19 @@ func (c *Clip) Params() (url.Values, error) {
 
 func (c *Clip) validate() error {
 	if c.TitleCode == "" {
-		return ErrorWithMessage(ErrMissingParameter, "TitleCode")
+		return newErrorWithMessage(ErrMissingParameter, "TitleCode")
 	}
 
 	if c.Title == "" {
-		return ErrorWithMessage(ErrMissingParameter, "Title")
+		return newErrorWithMessage(ErrMissingParameter, "Title")
 	}
 
 	if c.Length < 1 {
-		return ErrorWithMessage(ErrMissingParameter, "Length")
+		return newErrorWithMessage(ErrMissingParameter, "Length")
 	}
 
 	if len(c.PublishedAt) != 8 {
-		return ErrorWithMessage(ErrInvalidParameter, "PublishedAt")
+		return newErrorWithMessage(ErrInvalidParameter, "PublishedAt")
 	}
 
 	return nil

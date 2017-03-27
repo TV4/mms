@@ -13,9 +13,9 @@ var (
 	ErrInvalidParameter = errors.New("invalid parameter")
 )
 
-// ErrorWithMessage annotates err with a new message.
-// If err is nil, ErrorWithMessage returns nil.
-func ErrorWithMessage(err error, msg string) error {
+// newErrorWithMessage annotates err with a new message.
+// If err is nil, newErrorWithMessage returns nil.
+func newErrorWithMessage(err error, msg string) error {
 	if err == nil {
 		return nil
 	}

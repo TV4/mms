@@ -134,45 +134,45 @@ func (e *Episode) Params() (url.Values, error) {
 
 func (e *Episode) validate() error {
 	if e.TitleCode == "" {
-		return ErrorWithMessage(ErrMissingParameter, "TitleCode")
+		return newErrorWithMessage(ErrMissingParameter, "TitleCode")
 	}
 
 	if e.SeriesCode == "" {
-		return ErrorWithMessage(ErrMissingParameter, "SeriesCode")
+		return newErrorWithMessage(ErrMissingParameter, "SeriesCode")
 	}
 
 	if e.Title == "" {
-		return ErrorWithMessage(ErrMissingParameter, "Title")
+		return newErrorWithMessage(ErrMissingParameter, "Title")
 	}
 
 	if e.Length < 1 {
-		return ErrorWithMessage(ErrInvalidParameter, "Length")
+		return newErrorWithMessage(ErrInvalidParameter, "Length")
 	}
 
 	if len(e.PublishedAt) != 8 {
-		return ErrorWithMessage(ErrInvalidParameter, "PublishedAt")
+		return newErrorWithMessage(ErrInvalidParameter, "PublishedAt")
 	}
 
 	if !validCategoryID(e.CategoryID) {
-		return ErrorWithMessage(ErrInvalidParameter, "CategoryID")
+		return newErrorWithMessage(ErrInvalidParameter, "CategoryID")
 	}
 
 	switch e.CategoryID {
 	case TvProgram, TvSegment, TvExtra, Simulcast:
 		if e.LiveTitle == "" {
-			return ErrorWithMessage(ErrMissingParameter, "LiveTitle")
+			return newErrorWithMessage(ErrMissingParameter, "LiveTitle")
 		}
 
 		if len(e.LiveTvDay) != 8 {
-			return ErrorWithMessage(ErrInvalidParameter, "LiveTvDay")
+			return newErrorWithMessage(ErrInvalidParameter, "LiveTvDay")
 		}
 
 		if len(e.LiveTime) != 4 {
-			return ErrorWithMessage(ErrInvalidParameter, "LiveTime")
+			return newErrorWithMessage(ErrInvalidParameter, "LiveTime")
 		}
 
 		if !validLiveChannelID(e.LiveChannelID) {
-			return ErrorWithMessage(ErrInvalidParameter, "LiveChannelID")
+			return newErrorWithMessage(ErrInvalidParameter, "LiveChannelID")
 		}
 	}
 

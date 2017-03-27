@@ -109,7 +109,7 @@ func (c *Client) RegisterClip(ctx context.Context, clip Clip) (*Response, error)
 func (c *Client) register(ctx context.Context, req Request) (*Response, error) {
 	params, err := req.Params()
 	if err != nil {
-		return nil, ErrorWithMessage(err, string(req.Endpoint()))
+		return nil, newErrorWithMessage(err, string(req.Endpoint()))
 	}
 
 	return c.post(ctx, req.Endpoint(), params)
@@ -134,14 +134,14 @@ func (c *Client) request(ctx context.Context, path string, params url.Values) (*
 
 	rel, err := url.Parse(path)
 	if err != nil {
-		return nil, ErrorWithMessage(err, "unable to parse path")
+		return nil, newErrorWithMessage(err, "unable to parse path")
 	}
 
 	rawurl := c.baseURL.ResolveReference(rel).String()
 
 	req, err := http.NewRequest("POST", rawurl, strings.NewReader(params.Encode()))
 	if err != nil {
-		return nil, ErrorWithMessage(err, "unable to create POST request")
+		return nil, newErrorWithMessage(err, "unable to create POST request")
 	}
 
 	req = req.WithContext(ctx)
@@ -156,7 +156,7 @@ func (c *Client) request(ctx context.Context, path string, params url.Values) (*
 func (c *Client) do(req *http.Request) (*Response, error) {
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, ErrorWithMessage(err, "error sending the request")
+		return nil, newErrorWithMessage(err, "error sending the request")
 	}
 	defer func() {
 		_, _ = io.CopyN(ioutil.Discard, resp.Body, 64)
@@ -164,7 +164,7 @@ func (c *Client) do(req *http.Request) (*Response, error) {
 	}()
 
 	if ct := resp.Header.Get("Content-Type"); !strings.Contains(ct, "application/json") {
-		err := ErrorWithMessage(ErrUnexpectedContentType, ct)
+		err := newErrorWithMessage(ErrUnexpectedContentType, ct)
 
 		return &Response{
 			StatusCode:        resp.StatusCode,
@@ -176,7 +176,7 @@ func (c *Client) do(req *http.Request) (*Response, error) {
 	var r Response
 
 	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
-		return nil, ErrorWithMessage(err, "unable to decode the response body as JSON")
+		return nil, newErrorWithMessage(err, "unable to decode the response body as JSON")
 	}
 
 	return &r, nil

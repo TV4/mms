@@ -63,11 +63,11 @@ func (s *Series) Params() (url.Values, error) {
 
 func (s *Series) validate() error {
 	if s.SeriesCode == "" {
-		return ErrorWithMessage(ErrMissingParameter, "SeriesCode")
+		return newErrorWithMessage(ErrMissingParameter, "SeriesCode")
 	}
 
 	if s.Title == "" {
-		return ErrorWithMessage(ErrMissingParameter, "Title")
+		return newErrorWithMessage(ErrMissingParameter, "Title")
 	}
 
 	return nil
