@@ -12,9 +12,10 @@ func TestRegisterClip(t *testing.T) {
 		hf         = testHandlerFunc(statusCode, nil)
 
 		clip = Clip{
-			TitleCode: "clip-title-code",
-			Title:     "clip-title",
-			Length:    1,
+			TitleCode:   "clip-title-code",
+			Title:       "clip-title",
+			Length:      1,
+			PublishedAt: Date(2017, 3, 27),
 		}
 	)
 

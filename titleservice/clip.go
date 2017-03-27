@@ -65,5 +65,9 @@ func (c *Clip) validate() error {
 		return ErrorWithMessage(ErrMissingParameter, "Length")
 	}
 
+	if len(c.PublishedAt) != 8 {
+		return ErrorWithMessage(ErrInvalidParameter, "PublishedAt")
+	}
+
 	return nil
 }
