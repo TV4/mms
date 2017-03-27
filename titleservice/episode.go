@@ -19,8 +19,8 @@ type Episode struct {
 	Description     string        // optional
 	LinkedTitleCode string        // can only be reported for categories 2, 3, 8 (only for updates)
 	LiveTitle       string        // obligatory for categories 1, 2, 3, 8
-	LiveTvDay       string        // obligatory for categories 1, 2, 3, 8
-	LiveTime        string        // obligatory for categories 1, 2, 3, 8 (YYYYMMDD)
+	LiveTvDay       string        // obligatory for categories 1, 2, 3, 8 (YYYYMMDD)
+	LiveTime        string        // obligatory for categories 1, 2, 3, 8 (HHMM, MMS-time: 23:45=2345, 01:45=2545, 02:00=0200)
 	LiveChannelID   LiveChannelID // obligatory for categories 1, 2, 3, 8
 	PlayURL         string        // maximum of 150 characters
 	TargetGroupCode string        // optional V = Vuxen (Adults) B = Barn (Children)
