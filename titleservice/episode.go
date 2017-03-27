@@ -6,6 +6,24 @@ import (
 	"strings"
 )
 
+// MakeEpisode creates an Episode based on required parameters and optional parameters using options
+func MakeEpisode(titleCode, seriesCode, title string, length int, publishedAt string, categoryID CategoryID, options ...func(*Episode)) Episode {
+	e := &Episode{
+		TitleCode:   titleCode,
+		SeriesCode:  seriesCode,
+		Title:       title,
+		Length:      length,
+		PublishedAt: publishedAt,
+		CategoryID:  categoryID,
+	}
+
+	for _, f := range options {
+		f(e)
+	}
+
+	return *e
+}
+
 // Episode is a title linked to a series/season
 type Episode struct {
 	TitleCode       string        // required

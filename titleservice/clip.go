@@ -6,6 +6,22 @@ import (
 	"strings"
 )
 
+// MakeClip creates a Clip based on required parameters and optional parameters using options
+func MakeClip(titleCode, title string, length int, publishedAt string, options ...func(*Clip)) Clip {
+	c := &Clip{
+		TitleCode:   titleCode,
+		Title:       title,
+		Length:      length,
+		PublishedAt: publishedAt,
+	}
+
+	for _, f := range options {
+		f(c)
+	}
+
+	return *c
+}
+
 // Clip is a “stand-alone” short clip not linked to a series/season or other title
 type Clip struct {
 	TitleCode      string // required

@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestRegisterClip(t *testing.T) {
+func TestRegisterEpisode(t *testing.T) {
 	var (
 		statusCode = http.StatusInternalServerError
 		hf         = testHandlerFunc(statusCode, nil)
@@ -15,11 +15,21 @@ func TestRegisterClip(t *testing.T) {
 	ts, c := testServerAndClient(testUser, testPass, hf)
 	defer ts.Close()
 
-	r, err := c.RegisterClip(context.Background(), MakeClip(
-		"clip-title-code",
-		"clip-title",
+	r, err := c.RegisterEpisode(context.Background(), MakeEpisode(
+		"episode-title-code",
+		"episode-series-code",
+		"episode-title",
+
 		123,
 		Date(2017, 3, 27),
+		TvProgram,
+
+		func(e *Episode) {
+			e.LiveTitle = "episode-live-title"
+			e.LiveTvDay = Date(2017, 1, 2)
+			e.LiveTime = Time(10, 20)
+			e.LiveChannelID = TV4
+		},
 	))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)

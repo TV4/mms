@@ -5,6 +5,20 @@ import (
 	"net/url"
 )
 
+// MakeSeries creates a Series based on required parameters and optional parameters using options
+func MakeSeries(seriesCode, title string, options ...func(*Series)) Series {
+	s := &Series{
+		SeriesCode: seriesCode,
+		Title:      title,
+	}
+
+	for _, f := range options {
+		f(s)
+	}
+
+	return *s
+}
+
 // Series is a title linked to a series/season
 type Series struct {
 	SeriesCode   string // required
