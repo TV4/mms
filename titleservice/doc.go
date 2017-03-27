@@ -36,19 +36,23 @@ A small usage example:
 
 		flag.Parse()
 
-		var (
-			logger = log.New(os.Stderr, "", 0)
-			enc    = json.NewEncoder(os.Stdout)
-			ctx    = context.Background()
-			c      = titleservice.NewClient(username, password, titleservice.Simulate)
+		c := titleservice.NewClient(
+			username, password,
+			titleservice.Simulate,
 		)
 
-		resp, err := c.RegisterClip(ctx, titleservice.MakeClip(
-			"123", "Test-title", 456, titleservice.Date(2017, 3, 24),
-		))
+		resp, err := c.RegisterClip(context.Background(),
+			titleservice.MakeClip(
+				"123", "Test-title", 456,
+				titleservice.Date(2017, 3, 24),
+			),
+		)
 		if err != nil {
+			logger := log.New(os.Stderr, "", 0)
 			logger.Fatal(resp, "\n", err)
 		}
+
+		enc := json.NewEncoder(os.Stdout)
 
 		enc.SetIndent("", "  ")
 		enc.Encode(resp)
