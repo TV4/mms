@@ -14,7 +14,7 @@ func TestNewClient(t *testing.T) {
 	t.Run("Defaults", func(t *testing.T) {
 		username, password := "foo", "bar"
 
-		c := NewClient(username, password).(*client)
+		c := NewClient(username, password)
 
 		if got, want := c.httpClient.Timeout, defaultTimeout; got != want {
 			t.Fatalf("c.httpClient.Timeout = %v, want %v", got, want)
@@ -48,7 +48,7 @@ func TestNewClient(t *testing.T) {
 	t.Run("HTTPClient", func(t *testing.T) {
 		timeout := 123 * time.Second
 
-		c := NewClient("", "", HTTPClient(&http.Client{Timeout: timeout})).(*client)
+		c := NewClient("", "", HTTPClient(&http.Client{Timeout: timeout}))
 
 		if got, want := c.httpClient.Timeout, timeout; got != want {
 			t.Fatalf("c.httpClient.Timeout = %v, want %v", got, want)
@@ -58,7 +58,7 @@ func TestNewClient(t *testing.T) {
 	t.Run("BaseURL", func(t *testing.T) {
 		rawurl := "http://example.com"
 
-		c := NewClient("", "", BaseURL(rawurl)).(*client)
+		c := NewClient("", "", BaseURL(rawurl))
 
 		if got, want := c.baseURL.String(), rawurl; got != want {
 			t.Fatalf("c.baseURL.String() = %q, want %q", got, want)
@@ -68,7 +68,7 @@ func TestNewClient(t *testing.T) {
 	t.Run("UserAgent", func(t *testing.T) {
 		ua := "user-agent-test"
 
-		c := NewClient("", "", UserAgent(ua)).(*client)
+		c := NewClient("", "", UserAgent(ua))
 
 		if got, want := c.userAgent, ua; got != want {
 			t.Fatalf("c.userAgent = %q, want %q", got, want)
@@ -76,7 +76,7 @@ func TestNewClient(t *testing.T) {
 	})
 
 	t.Run("Simulate", func(t *testing.T) {
-		c := NewClient("", "", Simulate).(*client)
+		c := NewClient("", "", Simulate)
 
 		if got, want := c.simulate, true; got != want {
 			t.Fatalf("c.simulate = %v, want %v", got, want)
@@ -97,7 +97,7 @@ func TestClientRequest(t *testing.T) {
 		{false, "/BarBaz", "barUser", "bazPass", url.Values{}, "pass=bazPass&user=barUser"},
 		{true, "/BazQux", "bazUser", "quxPass", url.Values{"quux": {"corge"}}, "pass=quxPass&quux=corge&simulate=&user=bazUser"},
 	} {
-		c := testClient(func(c *client) {
+		c := testClient(func(c *Client) {
 			c.username = tt.username
 			c.password = tt.password
 			c.simulate = tt.simulate
@@ -138,8 +138,8 @@ const (
 	testHost = "http://example.com"
 )
 
-func testClient(options ...func(*client)) *client {
-	c := NewClient(testUser, testPass, BaseURL(testHost)).(*client)
+func testClient(options ...func(*Client)) *Client {
+	c := NewClient(testUser, testPass, BaseURL(testHost))
 
 	for _, f := range options {
 		f(c)
@@ -148,10 +148,10 @@ func testClient(options ...func(*client)) *client {
 	return c
 }
 
-func testServerAndClient(username, password string, hf http.HandlerFunc) (*httptest.Server, *client) {
+func testServerAndClient(username, password string, hf http.HandlerFunc) (*httptest.Server, *Client) {
 	ts := httptest.NewServer(http.HandlerFunc(hf))
 
-	return ts, NewClient(username, password, BaseURL(ts.URL)).(*client)
+	return ts, NewClient(username, password, BaseURL(ts.URL))
 }
 
 func testHandlerFunc(statusCode int, errors []string) http.HandlerFunc {

@@ -18,13 +18,6 @@ const (
 	defaultTimeout   = 30 * time.Second
 )
 
-// Client for the MMS TitleService API
-type Client interface {
-	RegisterSeries(context.Context, Series) (*Response, error)
-	RegisterEpisode(context.Context, Episode) (*Response, error)
-	RegisterClip(context.Context, Clip) (*Response, error)
-}
-
 // Request interface used in requests to the MMS TitleService API
 type Request interface {
 	Endpoint() Endpoint
@@ -38,7 +31,8 @@ type Response struct {
 	Errors            []string `json:"Errors"`
 }
 
-type client struct {
+// Client for the MMS TitleService API
+type Client struct {
 	httpClient *http.Client
 	baseURL    *url.URL
 	userAgent  string
@@ -48,8 +42,8 @@ type client struct {
 }
 
 // NewClient creates a MMS TitleService Client
-func NewClient(username, password string, options ...func(*client)) Client {
-	c := &client{
+func NewClient(username, password string, options ...func(*Client)) *Client {
+	c := &Client{
 		httpClient: &http.Client{
 			Timeout: defaultTimeout,
 		},
@@ -70,15 +64,15 @@ func NewClient(username, password string, options ...func(*client)) Client {
 }
 
 // HTTPClient changes the *client HTTP client to the provided *http.Client
-func HTTPClient(hc *http.Client) func(*client) {
-	return func(c *client) {
+func HTTPClient(hc *http.Client) func(*Client) {
+	return func(c *Client) {
 		c.httpClient = hc
 	}
 }
 
 // BaseURL changes the *client base URL based on the provided rawurl
-func BaseURL(rawurl string) func(*client) {
-	return func(c *client) {
+func BaseURL(rawurl string) func(*Client) {
+	return func(c *Client) {
 		if u, err := url.Parse(rawurl); err == nil {
 			c.baseURL = u
 		}
@@ -86,30 +80,33 @@ func BaseURL(rawurl string) func(*client) {
 }
 
 // UserAgent changes the User-Agent used in requests sent by the *client
-func UserAgent(ua string) func(*client) {
-	return func(c *client) {
+func UserAgent(ua string) func(*Client) {
+	return func(c *Client) {
 		c.userAgent = ua
 	}
 }
 
 // Simulate configures the client to make simulated requests (nothing will be saved to MMS' databases)
-func Simulate(c *client) {
+func Simulate(c *Client) {
 	c.simulate = true
 }
 
-func (c *client) RegisterSeries(ctx context.Context, series Series) (*Response, error) {
+// RegisterSeries registers a Series
+func (c *Client) RegisterSeries(ctx context.Context, series Series) (*Response, error) {
 	return c.register(ctx, &series)
 }
 
-func (c *client) RegisterEpisode(ctx context.Context, episode Episode) (*Response, error) {
+// RegisterEpisode registers an Episode
+func (c *Client) RegisterEpisode(ctx context.Context, episode Episode) (*Response, error) {
 	return c.register(ctx, &episode)
 }
 
-func (c *client) RegisterClip(ctx context.Context, clip Clip) (*Response, error) {
+// RegisterClip registers a Clip
+func (c *Client) RegisterClip(ctx context.Context, clip Clip) (*Response, error) {
 	return c.register(ctx, &clip)
 }
 
-func (c *client) register(ctx context.Context, req Request) (*Response, error) {
+func (c *Client) register(ctx context.Context, req Request) (*Response, error) {
 	params, err := req.Params()
 	if err != nil {
 		return nil, ErrorWithMessage(err, string(req.Endpoint()))
@@ -118,7 +115,7 @@ func (c *client) register(ctx context.Context, req Request) (*Response, error) {
 	return c.post(ctx, req.Endpoint(), params)
 }
 
-func (c *client) post(ctx context.Context, endpoint Endpoint, params url.Values) (*Response, error) {
+func (c *Client) post(ctx context.Context, endpoint Endpoint, params url.Values) (*Response, error) {
 	req, err := c.request(ctx, string(endpoint), params)
 	if err != nil {
 		return nil, err
@@ -127,7 +124,7 @@ func (c *client) post(ctx context.Context, endpoint Endpoint, params url.Values)
 	return c.do(req)
 }
 
-func (c *client) request(ctx context.Context, path string, params url.Values) (*http.Request, error) {
+func (c *Client) request(ctx context.Context, path string, params url.Values) (*http.Request, error) {
 	params.Set("user", c.username)
 	params.Set("pass", c.password)
 
@@ -156,7 +153,7 @@ func (c *client) request(ctx context.Context, path string, params url.Values) (*
 	return req, nil
 }
 
-func (c *client) do(req *http.Request) (*Response, error) {
+func (c *Client) do(req *http.Request) (*Response, error) {
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, ErrorWithMessage(err, "error sending the request")
