@@ -7,8 +7,6 @@ import (
 
 // Time formats a hour and minute into the MMS Time format
 //
-// Format
-//
 // 0200-2559 (The leading zero is optional)
 //
 // Examples
