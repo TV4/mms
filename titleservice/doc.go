@@ -38,7 +38,7 @@ A small usage example:
 
 		c := titleservice.NewClient(
 			username, password,
-			titleservice.Simulate,
+			titleservice.Simulate(true),
 		)
 
 		resp, err := c.RegisterClip(context.Background(),

@@ -76,7 +76,7 @@ func TestNewClient(t *testing.T) {
 	})
 
 	t.Run("Simulate", func(t *testing.T) {
-		c := NewClient("", "", Simulate)
+		c := NewClient("", "", Simulate(true))
 
 		if got, want := c.simulate, true; got != want {
 			t.Fatalf("c.simulate = %v, want %v", got, want)

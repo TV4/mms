@@ -87,8 +87,10 @@ func UserAgent(ua string) func(*Client) {
 }
 
 // Simulate configures the client to make simulated requests (nothing will be saved to MMS' databases)
-func Simulate(c *Client) {
-	c.simulate = true
+func Simulate(b bool) func(c *Client) {
+	return func(c *Client) {
+		c.simulate = b
+	}
 }
 
 // RegisterSeries registers a Series

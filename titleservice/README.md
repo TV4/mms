@@ -31,7 +31,7 @@ func main() {
 
 	c := titleservice.NewClient(
 		username, password,
-		titleservice.Simulate,
+		titleservice.Simulate(true),
 	)
 
 	resp, err := c.RegisterClip(context.Background(),
@@ -53,4 +53,4 @@ func main() {
 ```
 
 ### Note
-> You need to remove the option `titleservice.Simulate` in order to make requests that are persisted to the MMS database
+> You need to remove the option `titleservice.Simulate(true)` (or set it to false) in order to make requests that are persisted to the MMS database
