@@ -26,26 +26,26 @@ func MakeEpisode(titleCode, seriesCode, title string, length int, publishedAt st
 
 // Episode is a title linked to a series/season
 type Episode struct {
-	TitleCode       string        // required
-	SeriesCode      string        // required
-	Title           string        // required
-	Length          int           // required
-	PublishedAt     string        // required (YYYYMMDD)
-	AvailableUntil  string        // optional (YYYYMMDD)
-	CategoryID      CategoryID    // required
-	EpisodeNumber   int           // only applicable to Categories 1, 2, 4, 5
-	Description     string        // optional
-	LinkedTitleCode string        // can only be reported for categories 2, 3, 8 (only for updates)
-	LiveTitle       string        // obligatory for categories 1, 2, 3, 8
-	LiveTvDay       string        // obligatory for categories 1, 2, 3, 8 (YYYYMMDD)
-	LiveTime        string        // obligatory for categories 1, 2, 3, 8 (HHMM, MMS-time: 23:45=2345, 01:45=2545, 02:00=0200)
-	LiveChannelID   LiveChannelID // obligatory for categories 1, 2, 3, 8
-	PlayURL         string        // maximum of 150 characters
-	TargetGroupCode string        // optional V = Vuxen (Adults) B = Barn (Children)
-	TerritoryCode   string        // optional S = Svenskt (Swedish) U = Utländskt (Foreign)
-	SuggestedGenre1 string        // free text of maximum of 256 characters in length
-	SuggestedGenre2 string        // free text of maximum of 256 characters in length
-	SuggestedGenre3 string        // free text of maximum of 256 characters in length
+	TitleCode       string        `json:"title_code"`                  // required
+	SeriesCode      string        `json:"series_code"`                 // required
+	Title           string        `json:"title"`                       // required
+	Length          int           `json:"length"`                      // required
+	PublishedAt     string        `json:"published_at"`                // required (YYYYMMDD)
+	AvailableUntil  string        `json:"available_until,omitempty"`   // optional (YYYYMMDD)
+	CategoryID      CategoryID    `json:"category_id"`                 // required
+	EpisodeNumber   int           `json:"episode_number,omitempty"`    // only applicable to Categories 1, 2, 4, 5
+	Description     string        `json:"description,omitempty"`       // optional
+	LinkedTitleCode string        `json:"linked_title_code,omitempty"` // can only be reported for categories 2, 3, 8 (only for updates)
+	LiveTitle       string        `json:"live_title,omitempty"`        // obligatory for categories 1, 2, 3, 8
+	LiveTvDay       string        `json:"live_tv_day,omitempty"`       // obligatory for categories 1, 2, 3, 8 (YYYYMMDD)
+	LiveTime        string        `json:"live_time,omitempty"`         // obligatory for categories 1, 2, 3, 8 (HHMM, MMS-time: 23:45=2345, 01:45=2545, 02:00=0200)
+	LiveChannelID   LiveChannelID `json:"live_channel_id,omitempty"`   // obligatory for categories 1, 2, 3, 8
+	PlayURL         string        `json:"play_url,omitempty"`          // maximum of 150 characters
+	TargetGroupCode string        `json:"target_group_code,omitempty"` // optional V = Vuxen (Adults) B = Barn (Children)
+	TerritoryCode   string        `json:"territory_code,omitempty"`    // optional S = Svenskt (Swedish) U = Utländskt (Foreign)
+	SuggestedGenre1 string        `json:"suggested_genre_1,omitempty"` // free text of maximum of 256 characters in length
+	SuggestedGenre2 string        `json:"suggested_genre_2,omitempty"` // free text of maximum of 256 characters in length
+	SuggestedGenre3 string        `json:"suggested_genre_3,omitempty"` // free text of maximum of 256 characters in length
 }
 
 // Endpoint returns the endpoint to use for this request type

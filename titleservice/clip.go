@@ -24,13 +24,13 @@ func MakeClip(titleCode, title string, length int, publishedAt string, options .
 
 // Clip is a “stand-alone” short clip not linked to a series/season or other title
 type Clip struct {
-	TitleCode      string // required
-	Title          string // required
-	Length         int    // required
-	PublishedAt    string // required
-	AvailableUntil string
-	Description    string
-	PlayURL        string
+	TitleCode      string `json:"title_code"`                // required
+	Title          string `json:"title"`                     // required
+	Length         int    `json:"length"`                    // required
+	PublishedAt    string `json:"published_at"`              // required
+	AvailableUntil string `json:"available_until,omitempty"` // optional
+	Description    string `json:"description,omitempty"`     // optional
+	PlayURL        string `json:"play_url,omitempty"`        // optional
 }
 
 // Endpoint returns the endpoint to use for this request type

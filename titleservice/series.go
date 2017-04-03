@@ -21,11 +21,11 @@ func MakeSeries(seriesCode, title string, options ...func(*Series)) Series {
 
 // Series is a title linked to a series/season
 type Series struct {
-	SeriesCode   string // required
-	Title        string // required
-	SeasonNumber int
-	Description  string
-	GenreText    string
+	SeriesCode   string `json:"series_code"`             // required
+	Title        string `json:"title"`                   // required
+	SeasonNumber int    `json:"season_number,omitempty"` // optional
+	Description  string `json:"description,omitempty"`   // optional
+	GenreText    string `json:"genre_text,omitempty"`    // optional
 }
 
 // Endpoint returns the endpoint to use for this request type
