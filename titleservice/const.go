@@ -78,6 +78,13 @@ const (
 	Eurosport2Sweden       LiveChannelID = 2047
 )
 
+// LookupLiveChannelID using the channel name as specified in the MMS TitleService v1.2 documentation
+func LookupLiveChannelID(name string) (LiveChannelID, bool) {
+	id, ok := channelLookupTable[name]
+
+	return id, ok
+}
+
 func validLiveChannelID(id LiveChannelID) bool {
 	switch id {
 	case
@@ -88,4 +95,32 @@ func validLiveChannelID(id LiveChannelID) bool {
 	}
 
 	return false
+}
+
+var channelLookupTable = map[string]LiveChannelID{
+	"svt1":            SVT1,
+	"svt2":            SVT2,
+	"Discovery":       Discovery,
+	"Kanal5":          Kanal5,
+	"TV3":             TV3,
+	"TV4":             TV4,
+	"Kanal9":          Kanal9,
+	"svtB":            SVTB,
+	"Sjuan":           Sjuan,
+	"TV4 Film":        TV4Film,
+	"TV6":             TV6,
+	"TV4 Sport":       TV4Sport,
+	"TV4 Fakta":       TV4Fakta,
+	"TV4 Guld":        TV4Guld,
+	"TV4 Komedi":      TV4Komedi,
+	"TV8":             TV8,
+	"svt24":           SVT24,
+	"TV12":            TV12,
+	"Kunskapskanalen": Kunskapskanalen,
+	"TV10":            TV10,
+	"TLC":             TLC,
+	"Investigation Discovery": InvestigationDiscovery,
+	"Eurosport":               Eurosport,
+	"Kanal 11":                Kanal11,
+	"Eurosport 2 Sweden":      Eurosport2Sweden,
 }
