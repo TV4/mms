@@ -5,6 +5,15 @@ import (
 	"time"
 )
 
+// Stockholm is the Time Zone in Sweden
+var Stockholm *time.Location
+
+func init() {
+	if location, err := time.LoadLocation("Europe/Stockholm"); err == nil {
+		Stockholm = location
+	}
+}
+
 // Time formats a hour and minute into the MMS Time format
 //
 // 0200-2559 (The leading zero is optional)
@@ -35,5 +44,5 @@ func Date(year int, month time.Month, day int) string {
 
 // DateAtTime returns the date string for the provided time.Time
 func DateAtTime(t time.Time) string {
-	return Date(t.Date())
+	return Date(t.In(Stockholm).Add(-2 * time.Hour).Date())
 }

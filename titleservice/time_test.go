@@ -42,3 +42,24 @@ func TestDate(t *testing.T) {
 		}
 	}
 }
+
+func TestDateAtTime(t *testing.T) {
+	for _, tt := range []struct {
+		time time.Time
+		want string
+	}{
+		{time.Date(2016, time.April, 16, 13, 50, 0, 0, Stockholm), "20160416"},
+		{time.Date(2017, time.March, 26, 1, 0, 0, 0, Stockholm), "20170325"},
+		{time.Date(2017, time.March, 26, 2, 0, 1, 0, Stockholm), "20170326"},
+		{time.Date(2017, time.April, 20, 1, 0, 0, 0, Stockholm), "20170419"},
+		{time.Date(2017, time.April, 20, 2, 0, 0, 0, Stockholm), "20170420"},
+		{time.Date(2017, time.October, 29, 1, 9, 0, 0, Stockholm), "20171028"},
+		{time.Date(2017, time.October, 29, 2, 5, 0, 0, Stockholm), "20171029"},
+		{time.Date(2017, time.October, 29, 3, 0, 0, 0, Stockholm), "20171029"},
+	} {
+		if got := DateAtTime(tt.time); got != tt.want {
+			t.Fatalf("DateAtTime(<%s>) = %q, want %q", tt.time, got, tt.want)
+		}
+	}
+
+}
