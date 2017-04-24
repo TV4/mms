@@ -40,7 +40,7 @@ func (c *Clip) Endpoint() Endpoint {
 
 // Params validates and returns the parameters sent to the MMS TitleService API for this request type
 func (c *Clip) Params() (url.Values, error) {
-	if err := c.validate(); err != nil {
+	if err := c.Validate(); err != nil {
 		return url.Values{}, err
 	}
 
@@ -68,7 +68,8 @@ func (c *Clip) Params() (url.Values, error) {
 	return params, nil
 }
 
-func (c *Clip) validate() error {
+// Validate all fields
+func (c *Clip) Validate() error {
 	if c.TitleCode == "" {
 		return newErrorWithMessage(ErrMissingParameter, "TitleCode")
 	}

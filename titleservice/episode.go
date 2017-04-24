@@ -55,7 +55,7 @@ func (e *Episode) Endpoint() Endpoint {
 
 // Params validates and returns the parameters sent to the MMS TitleService API for this request type
 func (e *Episode) Params() (url.Values, error) {
-	if err := e.validate(); err != nil {
+	if err := e.Validate(); err != nil {
 		return url.Values{}, err
 	}
 
@@ -132,7 +132,8 @@ func (e *Episode) Params() (url.Values, error) {
 	return params, nil
 }
 
-func (e *Episode) validate() error {
+// Validate all fields
+func (e *Episode) Validate() error {
 	if e.TitleCode == "" {
 		return newErrorWithMessage(ErrMissingParameter, "TitleCode")
 	}

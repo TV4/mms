@@ -35,7 +35,7 @@ func (s *Series) Endpoint() Endpoint {
 
 // Params validates and returns the parameters sent to the MMS TitleService API for this request type
 func (s *Series) Params() (url.Values, error) {
-	if err := s.validate(); err != nil {
+	if err := s.Validate(); err != nil {
 		return url.Values{}, err
 	}
 
@@ -61,7 +61,8 @@ func (s *Series) Params() (url.Values, error) {
 	return params, nil
 }
 
-func (s *Series) validate() error {
+// Validate all fields
+func (s *Series) Validate() error {
 	if s.SeriesCode == "" {
 		return newErrorWithMessage(ErrMissingParameter, "SeriesCode")
 	}
