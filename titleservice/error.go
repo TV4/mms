@@ -11,6 +11,12 @@ var (
 
 	// ErrInvalidParameter is returned if a parameter is invalid for some reason
 	ErrInvalidParameter = errors.New("invalid parameter")
+
+	// ErrNoUsername is returned if username is empty
+	ErrNoUsername = errors.New("no username")
+
+	// ErrNoPassword is returned if password is empty
+	ErrNoPassword = errors.New("no password")
 )
 
 // newErrorWithMessage annotates err with a new message.
