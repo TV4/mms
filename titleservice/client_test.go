@@ -84,7 +84,19 @@ func TestNewClient(t *testing.T) {
 	})
 }
 
-func TestInvalidCredentialsClientRequest(t *testing.T) {
+func TestClientSimulated(t *testing.T) {
+	for _, tt := range []struct {
+		client   *Client
+		simulate bool
+	}{
+		{testClient(), false},
+		{testClient(func(c *Client) { c.simulate = true }), true},
+		{testClient(func(c *Client) { c.simulate = false }), false},
+	} {
+		if got, want := tt.client.Simulated(), tt.simulate; got != want {
+			t.Fatalf("tt.client.Simulated() = %v, want %v", got, want)
+		}
+	}
 }
 
 func TestClientRequest(t *testing.T) {

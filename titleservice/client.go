@@ -93,6 +93,11 @@ func Simulate(b bool) func(c *Client) {
 	}
 }
 
+// Simulated returns true if the client is configured to send simulated requests
+func (c *Client) Simulated() bool {
+	return c.simulate
+}
+
 // RegisterSeries registers a Series
 func (c *Client) RegisterSeries(ctx context.Context, series Series) (*Response, error) {
 	return c.register(ctx, &series)
