@@ -127,6 +127,10 @@ func (c *Client) post(ctx context.Context, endpoint Endpoint, params url.Values)
 }
 
 func (c *Client) request(ctx context.Context, path string, params url.Values) (*http.Request, error) {
+	if err := c.validateCredentials(); err != nil {
+		return nil, err
+	}
+
 	params.Set("user", c.username)
 	params.Set("pass", c.password)
 
@@ -182,4 +186,16 @@ func (c *Client) do(req *http.Request) (*Response, error) {
 	}
 
 	return &r, nil
+}
+
+func (c *Client) validateCredentials() error {
+	if c.username == "" {
+		return ErrNoUsername
+	}
+
+	if c.password == "" {
+		return ErrNoPassword
+	}
+
+	return nil
 }

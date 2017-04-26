@@ -84,52 +84,78 @@ func TestNewClient(t *testing.T) {
 	})
 }
 
+func TestInvalidCredentialsClientRequest(t *testing.T) {
+}
+
 func TestClientRequest(t *testing.T) {
-	for _, tt := range []struct {
-		simulate bool
-		path     string
-		username string
-		password string
-		v        url.Values
-		encoded  string
-	}{
-		{false, "/FooBar", "fooUser", "barPass", url.Values{}, "pass=barPass&user=fooUser"},
-		{false, "/BarBaz", "barUser", "bazPass", url.Values{}, "pass=bazPass&user=barUser"},
-		{true, "/BazQux", "bazUser", "quxPass", url.Values{"quux": {"corge"}}, "pass=quxPass&quux=corge&simulate=&user=bazUser"},
-	} {
-		c := testClient(func(c *Client) {
-			c.username = tt.username
-			c.password = tt.password
-			c.simulate = tt.simulate
-		})
+	t.Run("valid_credentials", func(t *testing.T) {
+		for _, tt := range []struct {
+			simulate bool
+			path     string
+			username string
+			password string
+			v        url.Values
+			encoded  string
+		}{
+			{false, "/FooBar", "fooUser", "barPass", url.Values{}, "pass=barPass&user=fooUser"},
+			{false, "/BarBaz", "barUser", "bazPass", url.Values{}, "pass=bazPass&user=barUser"},
+			{true, "/BazQux", "bazUser", "quxPass", url.Values{"quux": {"corge"}}, "pass=quxPass&quux=corge&simulate=&user=bazUser"},
+		} {
+			c := testClient(func(c *Client) {
+				c.username = tt.username
+				c.password = tt.password
+				c.simulate = tt.simulate
+			})
 
-		req, err := c.request(context.Background(), tt.path, tt.v)
-		if err != nil {
-			t.Fatalf("unexpected error: %v", err)
+			req, err := c.request(context.Background(), tt.path, tt.v)
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+
+			if got, want := req.URL.Path, tt.path; got != want {
+				t.Fatalf("req.URL.Path = %q, want %q", got, want)
+			}
+
+			if got, want := req.Header.Get("Accept"), "application/json"; got != want {
+				t.Fatalf(`req.Header.Get("Accept") = %q, want %q`, got, want)
+			}
+
+			if got, want := req.Header.Get("User-Agent"), defaultUserAgent; got != want {
+				t.Fatalf(`req.Header.Get("Content-Type") = %q, want %q`, got, want)
+			}
+
+			if got, want := req.Header.Get("Content-Type"), "application/x-www-form-urlencoded"; got != want {
+				t.Fatalf(`req.Header.Get("Content-Type") = %q, want %q`, got, want)
+			}
+
+			req.ParseForm()
+
+			if got, want := req.Form.Encode(), tt.encoded; got != want {
+				t.Fatalf("req.Form.Encode() = %q, want %q", got, want)
+			}
 		}
+	})
 
-		if got, want := req.URL.Path, tt.path; got != want {
-			t.Fatalf("req.URL.Path = %q, want %q", got, want)
+	t.Run("invalid_credentials", func(t *testing.T) {
+		for _, tt := range []struct {
+			username string
+			password string
+			err      error
+		}{
+			{"", "", ErrNoUsername},
+			{"foo", "", ErrNoPassword},
+			{"", "bar", ErrNoUsername},
+			{"foo", "bar", nil},
+		} {
+			c := testClient(func(c *Client) {
+				c.username = tt.username
+				c.password = tt.password
+			})
+			if _, err := c.request(context.Background(), "/", url.Values{}); err != tt.err {
+				t.Fatalf("Unexpected error: %v", err)
+			}
 		}
-
-		if got, want := req.Header.Get("Accept"), "application/json"; got != want {
-			t.Fatalf(`req.Header.Get("Accept") = %q, want %q`, got, want)
-		}
-
-		if got, want := req.Header.Get("User-Agent"), defaultUserAgent; got != want {
-			t.Fatalf(`req.Header.Get("Content-Type") = %q, want %q`, got, want)
-		}
-
-		if got, want := req.Header.Get("Content-Type"), "application/x-www-form-urlencoded"; got != want {
-			t.Fatalf(`req.Header.Get("Content-Type") = %q, want %q`, got, want)
-		}
-
-		req.ParseForm()
-
-		if got, want := req.Form.Encode(), tt.encoded; got != want {
-			t.Fatalf("req.Form.Encode() = %q, want %q", got, want)
-		}
-	}
+	})
 }
 
 const (
