@@ -8,7 +8,7 @@ import (
 
 func TestRegisterClip(t *testing.T) {
 	var (
-		statusCode = http.StatusInternalServerError
+		statusCode = http.StatusTeapot
 		hf         = testHandlerFunc(statusCode, nil)
 	)
 

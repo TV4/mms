@@ -17,6 +17,18 @@ var (
 
 	// ErrNoPassword is returned if password is empty
 	ErrNoPassword = errors.New("no password")
+
+	// ErrInvalidInputData is returned on status 400 from the MMS TitleService API
+	ErrInvalidInputData = errors.New("invalid input data (bad request)")
+
+	// ErrAuthenticationFailure is returned on status 403 from the MMS TitleService API
+	ErrAuthenticationFailure = errors.New("authentication failure (forbidden)")
+
+	// ErrAlreadyRegistered is returned on status 409 from the MMS TitleService API
+	ErrAlreadyRegistered = errors.New("already registered (conflict)")
+
+	// ErrInternalServerError is returned on status 500 from the MMS TitleService API
+	ErrInternalServerError = errors.New("internal server error")
 )
 
 // newErrorWithMessage annotates err with a new message.

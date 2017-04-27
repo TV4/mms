@@ -174,14 +174,19 @@ func (c *Client) do(req *http.Request) (*Response, error) {
 		_ = resp.Body.Close()
 	}()
 
-	if ct := resp.Header.Get("Content-Type"); !strings.Contains(ct, "application/json") {
-		err := newErrorWithMessage(ErrUnexpectedContentType, ct)
+	switch resp.StatusCode {
+	case http.StatusBadRequest:
+		return errorResponse(resp, ErrInvalidInputData)
+	case http.StatusForbidden:
+		return errorResponse(resp, ErrAuthenticationFailure)
+	case http.StatusConflict:
+		return errorResponse(resp, ErrAlreadyRegistered)
+	case http.StatusInternalServerError:
+		return errorResponse(resp, ErrInternalServerError)
+	}
 
-		return &Response{
-			StatusCode:        resp.StatusCode,
-			StatusDescription: resp.Status,
-			Errors:            []string{err.Error()},
-		}, err
+	if ct := resp.Header.Get("Content-Type"); !strings.Contains(ct, "application/json") {
+		return errorResponse(resp, newErrorWithMessage(ErrUnexpectedContentType, ct))
 	}
 
 	var r Response
@@ -191,6 +196,14 @@ func (c *Client) do(req *http.Request) (*Response, error) {
 	}
 
 	return &r, nil
+}
+
+func errorResponse(resp *http.Response, err error) (*Response, error) {
+	return &Response{
+		StatusCode:        resp.StatusCode,
+		StatusDescription: resp.Status,
+		Errors:            []string{err.Error()},
+	}, err
 }
 
 func (c *Client) validateCredentials() error {
