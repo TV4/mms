@@ -2,6 +2,7 @@ package titleservice
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"testing"
 )
@@ -25,5 +26,22 @@ func TestRegisterSeries(t *testing.T) {
 
 	if got, want := r.StatusCode, statusCode; got != want {
 		t.Fatalf("r.StatusCode = %d, want %d", got, want)
+	}
+}
+
+func TestSeriesValidate(t *testing.T) {
+	for _, tt := range []struct {
+		s    *Series
+		want string
+	}{
+		{&Series{}, "SeriesCode: missing parameter"},
+		{&Series{SeriesCode: "S"}, "Title: missing parameter"},
+		{&Series{SeriesCode: "S", Title: "T"}, "<nil>"},
+		{&Series{SeriesCode: "S", Title: "T", Description: "Foo"}, "<nil>"},
+		{&Series{SeriesCode: "S", Title: "T", Description: "<b>Foo</b>"}, "Description: invalid parameter"},
+	} {
+		if got := fmt.Sprintf("%v", tt.s.Validate()); got != tt.want {
+			t.Fatalf("tt.s.Validate() = %q, want %q", got, tt.want)
+		}
 	}
 }
