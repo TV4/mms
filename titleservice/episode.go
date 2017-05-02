@@ -158,6 +158,10 @@ func (e *Episode) Validate() error {
 		return newErrorWithMessage(ErrInvalidParameter, "CategoryID")
 	}
 
+	if strings.ContainsAny(e.Description, "<>") {
+		return newErrorWithMessage(ErrInvalidParameter, "Description")
+	}
+
 	switch e.CategoryID {
 	case TvProgram, TvSegment, TvExtra, Simulcast:
 		if e.LiveTitle == "" {

@@ -3,6 +3,7 @@ package titleservice
 import (
 	"fmt"
 	"net/url"
+	"strings"
 )
 
 // MakeSeries creates a Series based on required parameters and optional parameters using options
@@ -69,6 +70,10 @@ func (s *Series) Validate() error {
 
 	if s.Title == "" {
 		return newErrorWithMessage(ErrMissingParameter, "Title")
+	}
+
+	if strings.ContainsAny(s.Description, "<>") {
+		return newErrorWithMessage(ErrInvalidParameter, "Description")
 	}
 
 	return nil

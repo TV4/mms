@@ -86,5 +86,9 @@ func (c *Clip) Validate() error {
 		return newErrorWithMessage(ErrInvalidParameter, "PublishedAt")
 	}
 
+	if strings.ContainsAny(c.Description, "<>") {
+		return newErrorWithMessage(ErrInvalidParameter, "Description")
+	}
+
 	return nil
 }
