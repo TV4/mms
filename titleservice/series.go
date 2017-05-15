@@ -65,15 +65,15 @@ func (s *Series) Params() (url.Values, error) {
 // Validate all fields
 func (s *Series) Validate() error {
 	if s.SeriesCode == "" {
-		return newErrorWithMessage(ErrMissingParameter, "SeriesCode")
+		return newErrorWithMessage(ErrMissingParameter, "Series SeriesCode")
 	}
 
 	if s.Title == "" {
-		return newErrorWithMessage(ErrMissingParameter, "Title")
+		return newErrorWithMessage(ErrMissingParameter, "Series Title")
 	}
 
 	if strings.ContainsAny(s.Description, "<>") {
-		return newErrorWithMessage(ErrInvalidParameter, "Description")
+		return newErrorWithMessage(ErrInvalidParameter, "Series Description")
 	}
 
 	return nil

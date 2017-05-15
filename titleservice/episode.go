@@ -135,49 +135,49 @@ func (e *Episode) Params() (url.Values, error) {
 // Validate all fields
 func (e *Episode) Validate() error {
 	if e.TitleCode == "" {
-		return newErrorWithMessage(ErrMissingParameter, "TitleCode")
+		return newErrorWithMessage(ErrMissingParameter, "Episode TitleCode")
 	}
 
 	if e.SeriesCode == "" {
-		return newErrorWithMessage(ErrMissingParameter, "SeriesCode")
+		return newErrorWithMessage(ErrMissingParameter, "Episode SeriesCode")
 	}
 
 	if e.Title == "" {
-		return newErrorWithMessage(ErrMissingParameter, "Title")
+		return newErrorWithMessage(ErrMissingParameter, "Episode Title")
 	}
 
 	if e.Length < 1 {
-		return newErrorWithMessage(ErrInvalidParameter, "Length")
+		return newErrorWithMessage(ErrInvalidParameter, "Episode Length")
 	}
 
 	if len(e.PublishedAt) != 8 {
-		return newErrorWithMessage(ErrInvalidParameter, "PublishedAt")
+		return newErrorWithMessage(ErrInvalidParameter, "Episode PublishedAt")
 	}
 
 	if !validCategoryID(e.CategoryID) {
-		return newErrorWithMessage(ErrInvalidParameter, "CategoryID")
+		return newErrorWithMessage(ErrInvalidParameter, "Episode CategoryID")
 	}
 
 	if strings.ContainsAny(e.Description, "<>") {
-		return newErrorWithMessage(ErrInvalidParameter, "Description")
+		return newErrorWithMessage(ErrInvalidParameter, "Episode Description")
 	}
 
 	switch e.CategoryID {
 	case TvProgram, TvSegment, TvExtra, Simulcast:
 		if e.LiveTitle == "" {
-			return newErrorWithMessage(ErrMissingParameter, "LiveTitle")
+			return newErrorWithMessage(ErrMissingParameter, "Episode LiveTitle")
 		}
 
 		if len(e.LiveTvDay) != 8 {
-			return newErrorWithMessage(ErrInvalidParameter, "LiveTvDay")
+			return newErrorWithMessage(ErrInvalidParameter, "Episode LiveTvDay")
 		}
 
 		if len(e.LiveTime) != 4 {
-			return newErrorWithMessage(ErrInvalidParameter, "LiveTime")
+			return newErrorWithMessage(ErrInvalidParameter, "Episode LiveTime")
 		}
 
 		if !validLiveChannelID(e.LiveChannelID) {
-			return newErrorWithMessage(ErrInvalidParameter, "LiveChannelID")
+			return newErrorWithMessage(ErrInvalidParameter, "Episode LiveChannelID")
 		}
 	}
 

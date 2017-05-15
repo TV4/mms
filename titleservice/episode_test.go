@@ -46,16 +46,16 @@ func TestEpisodeValidate(t *testing.T) {
 		e    *Episode
 		want string
 	}{
-		{&Episode{}, "TitleCode: missing parameter"},
-		{&Episode{TitleCode: "TC"}, "SeriesCode: missing parameter"},
-		{&Episode{TitleCode: "TC", SeriesCode: "SC"}, "Title: missing parameter"},
-		{&Episode{TitleCode: "TC", SeriesCode: "SC", Title: "T"}, "Length: invalid parameter"},
-		{&Episode{TitleCode: "TC", SeriesCode: "SC", Title: "T", Length: 1}, "PublishedAt: invalid parameter"},
-		{&Episode{TitleCode: "TC", SeriesCode: "SC", Title: "T", Length: 1, PublishedAt: "20070102"}, "CategoryID: invalid parameter"},
+		{&Episode{}, "Episode TitleCode: missing parameter"},
+		{&Episode{TitleCode: "TC"}, "Episode SeriesCode: missing parameter"},
+		{&Episode{TitleCode: "TC", SeriesCode: "SC"}, "Episode Title: missing parameter"},
+		{&Episode{TitleCode: "TC", SeriesCode: "SC", Title: "T"}, "Episode Length: invalid parameter"},
+		{&Episode{TitleCode: "TC", SeriesCode: "SC", Title: "T", Length: 1}, "Episode PublishedAt: invalid parameter"},
+		{&Episode{TitleCode: "TC", SeriesCode: "SC", Title: "T", Length: 1, PublishedAt: "20070102"}, "Episode CategoryID: invalid parameter"},
 		{&Episode{TitleCode: "TC", SeriesCode: "SC", Title: "T", Length: 1, PublishedAt: "20070102", CategoryID: Webisode}, "<nil>"},
-		{&Episode{TitleCode: "TC", SeriesCode: "SC", Title: "T", Length: 1, PublishedAt: "20070102", CategoryID: Webisode, Description: "<b>"}, "Description: invalid parameter"},
-		{&Episode{TitleCode: "TC", SeriesCode: "SC", Title: "T", Length: 1, PublishedAt: "20070102", CategoryID: TvProgram}, "LiveTitle: missing parameter"},
-		{&Episode{TitleCode: "TC", SeriesCode: "SC", Title: "T", Length: 1, PublishedAt: "20070102", CategoryID: TvProgram, LiveTitle: "LT"}, "LiveTvDay: invalid parameter"},
+		{&Episode{TitleCode: "TC", SeriesCode: "SC", Title: "T", Length: 1, PublishedAt: "20070102", CategoryID: Webisode, Description: "<b>"}, "Episode Description: invalid parameter"},
+		{&Episode{TitleCode: "TC", SeriesCode: "SC", Title: "T", Length: 1, PublishedAt: "20070102", CategoryID: TvProgram}, "Episode LiveTitle: missing parameter"},
+		{&Episode{TitleCode: "TC", SeriesCode: "SC", Title: "T", Length: 1, PublishedAt: "20070102", CategoryID: TvProgram, LiveTitle: "LT"}, "Episode LiveTvDay: invalid parameter"},
 	} {
 		if got := fmt.Sprintf("%v", tt.e.Validate()); got != tt.want {
 			t.Fatalf("tt.e.Validate() = %q, want %q", got, tt.want)

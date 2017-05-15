@@ -71,23 +71,23 @@ func (c *Clip) Params() (url.Values, error) {
 // Validate all fields
 func (c *Clip) Validate() error {
 	if c.TitleCode == "" {
-		return newErrorWithMessage(ErrMissingParameter, "TitleCode")
+		return newErrorWithMessage(ErrMissingParameter, "Clip TitleCode")
 	}
 
 	if c.Title == "" {
-		return newErrorWithMessage(ErrMissingParameter, "Title")
+		return newErrorWithMessage(ErrMissingParameter, "Clip Title")
 	}
 
 	if c.Length < 1 {
-		return newErrorWithMessage(ErrMissingParameter, "Length")
+		return newErrorWithMessage(ErrMissingParameter, "Clip Length")
 	}
 
 	if len(c.PublishedAt) != 8 {
-		return newErrorWithMessage(ErrInvalidParameter, "PublishedAt")
+		return newErrorWithMessage(ErrInvalidParameter, "Clip PublishedAt")
 	}
 
 	if strings.ContainsAny(c.Description, "<>") {
-		return newErrorWithMessage(ErrInvalidParameter, "Description")
+		return newErrorWithMessage(ErrInvalidParameter, "Clip Description")
 	}
 
 	return nil

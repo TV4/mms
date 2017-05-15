@@ -36,13 +36,13 @@ func TestClipValidate(t *testing.T) {
 		c    *Clip
 		want string
 	}{
-		{&Clip{}, "TitleCode: missing parameter"},
-		{&Clip{TitleCode: "TC"}, "Title: missing parameter"},
-		{&Clip{TitleCode: "TC", Title: "T"}, "Length: missing parameter"},
-		{&Clip{TitleCode: "TC", Title: "T", Length: 1}, "PublishedAt: invalid parameter"},
-		{&Clip{TitleCode: "TC", Title: "T", Length: 1, PublishedAt: "invalid"}, "PublishedAt: invalid parameter"},
+		{&Clip{}, "Clip TitleCode: missing parameter"},
+		{&Clip{TitleCode: "TC"}, "Clip Title: missing parameter"},
+		{&Clip{TitleCode: "TC", Title: "T"}, "Clip Length: missing parameter"},
+		{&Clip{TitleCode: "TC", Title: "T", Length: 1}, "Clip PublishedAt: invalid parameter"},
+		{&Clip{TitleCode: "TC", Title: "T", Length: 1, PublishedAt: "invalid"}, "Clip PublishedAt: invalid parameter"},
 		{&Clip{TitleCode: "TC", Title: "T", Length: 1, PublishedAt: "20070102"}, "<nil>"},
-		{&Clip{TitleCode: "TC", Title: "T", Length: 1, PublishedAt: "20070102", Description: "<b>"}, "Description: invalid parameter"},
+		{&Clip{TitleCode: "TC", Title: "T", Length: 1, PublishedAt: "20070102", Description: "<b>"}, "Clip Description: invalid parameter"},
 	} {
 		if got := fmt.Sprintf("%v", tt.c.Validate()); got != tt.want {
 			t.Fatalf("tt.c.Validate() = %q, want %q", got, tt.want)
