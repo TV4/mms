@@ -14,7 +14,7 @@ Name | Documentation | Installation
 
 ## License (MIT)
 
-Copyright © 2017 TV4
+Copyright © 2017-2018 TV4
 
 > Permission is hereby granted, free of charge, to any person obtaining
 > a copy of this software and associated documentation files (the "Software"),
