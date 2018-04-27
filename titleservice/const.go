@@ -63,6 +63,7 @@ const (
 	SVTB                   LiveChannelID = 1050
 	TV3SportHD             LiveChannelID = 1052
 	EsportsTV              LiveChannelID = 1055
+	Sportkanalen           LiveChannelID = 1057
 	Sjuan                  LiveChannelID = 1061
 	TV4Film                LiveChannelID = 1070
 	TV6                    LiveChannelID = 1074
@@ -96,7 +97,7 @@ func validLiveChannelID(id LiveChannelID) bool {
 	switch id {
 	case
 		SVT1, SVT2, Discovery, Kanal5, TV3, TV4, Kanal9, DiscoveryWorld, DiscoveryScience,
-		SVTB, TV3SportHD, EsportsTV, Sjuan, TV4Film, TV6, TV4Sport, TV4Fakta, TV4Guld,
+		SVTB, TV3SportHD, EsportsTV, Sportkanalen, Sjuan, TV4Film, TV6, TV4Sport, TV4Fakta, TV4Guld,
 		TV4Komedi, TV8, AnimalPlanet, SVT24, DiscoveryHDShowcase, TV12, Kunskapskanalen,
 		TV10, TLC, InvestigationDiscovery, TV4FaktaXL, Eurosport1, Kanal11, Eurosport2Sweden:
 		return true
@@ -118,6 +119,7 @@ var channelLookupTable = map[string]LiveChannelID{
 	"svtB":                  SVTB,
 	"TV3 Sport HD":          TV3SportHD,
 	"Esports TV":            EsportsTV,
+	"Sportkanalen":          Sportkanalen,
 	"Sjuan":                 Sjuan,
 	"TV4 Film":              TV4Film,
 	"TV6":                   TV6,
